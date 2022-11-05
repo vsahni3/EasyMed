@@ -6,21 +6,21 @@ conn = sqlite3.connect('mydatabase.db')
 mycursor = conn.cursor()
 
 
-def create_records_table(username):
+def create_records_table(username: str):
     """Initialize record table for specified user"""
 
     command = f"CREATE TABLE IF NOT EXISTS {username}records (id INTEGER PRIMARY KEY AUTOINCREMENT, date nvarchar(100), time nvarchar(100), status nvarchar(100), med INTEGER, FOREIGN KEY (med) REFERENCES {username}meds(id))"
     mycursor.execute(command)
 
 
-def create_meds_table(username):
+def create_meds_table(username: str):
     """Initialize meds table for specified user"""
 
     command = f"CREATE TABLE IF NOT EXISTS {username}meds (id INTEGER PRIMARY KEY AUTOINCREMENT, day nvarchar(100), time nvarchar(100), name nvarchar(100), dosage INTEGER)"
     mycursor.execute(command)
 
 
-def insert_records_table(username, status, med):
+def insert_records_table(username: str, status: str, med: int):
     """Insert record into user's record table, where med is id of a medicine
 
     Preconditions:
@@ -34,8 +34,13 @@ def insert_records_table(username, status, med):
     mycursor.execute(command)
 
 
-def insert_meds_table(username, day, time, name, dosage):
-    """Insert medicine into user's med table"""
+def insert_meds_table(username: str, day: str, time: str, name: str, dosage: int):
+    """Insert medicine into user's med table
+
+    - day is a weekday name, capitalized
+    - time is in HH:MM:SS, 24h
+    - dosage is dosage in mg
+    """
 
     command = f"INSERT INTO {username}meds (day, time, name, dosage) VALUES ('{day}', '{time}', '{name}', '{dosage}')"
     mycursor.execute(command)
@@ -48,14 +53,14 @@ def create_users_table():
     mycursor.execute(command)
 
 
-def insert_users_table(username, password, points):
+def insert_users_table(username: str, password: str, points: int):
     """Insert new user into user table"""
 
     command = f"INSERT INTO userInfo (username, password, points) VALUES ('{username}', '{password}', {points})"
     mycursor.execute(command)
 
 
-def update_users_table(username, points_increase):
+def update_users_table(username: str, points_increase: int):
     """Update points of user in user table"""
 
     mycursor.execute(f'SELECT points FROM userInfo WHERE username = "{username}"')
@@ -78,8 +83,14 @@ def update_users_table(username, points_increase):
 #     time_difference = days_difference * 24 * 60 + (hour1 - hour2) * 60 + (minute1 - minute2) + (second1 - second2)
 
 
-def update_meds_table(username, med_id, day, time, name, dosage):
-    """Update medicine record of user's medtable"""
+def update_meds_table(username: str, med_id: int, day: str, time: str, name: str, dosage: int):
+    """Update medicine record of user's medtable
+
+    - med_id is an id of medicine to change in user's medtable
+    - day is a weekday name, capitalized
+    - time is in HH:MM:SS, 24h
+    - dosage is dosage in mg
+    """
 
     command = f"""UPDATE {username}meds 
     SET day = '{day}', 
@@ -90,13 +101,13 @@ def update_meds_table(username, med_id, day, time, name, dosage):
     mycursor.execute(command)
 
 
-def remove_meds_row(username, med_id):
+def remove_meds_row(username: str, med_id: int):
     """Remove medicine from user's med table"""
     command = f"DELETE FROM {username}meds WHERE id = {med_id}"
     mycursor.execute(command)
 
 
-def load_records(username):
+def load_records(username: str) -> list[tuple[str]]:
     """Returns a list of records for the user"""
     command = f"""SELECT * FROM {username}records 
     JOIN {username}meds ON {username}records.med = {username}meds.id"""
