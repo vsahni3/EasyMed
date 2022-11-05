@@ -97,7 +97,3 @@ import requests
 
 
 # matplotlib==3.6.2
-
-url = 'https://ez-med.herokuapp.com/upload'
-data = {"email":"test","text":"Patient Name John Smith\r\nAddress\r\nDLIIutn MN 55804\r\n42\r\nRx Amoxicillin 250 mg tablets\r\nTT tablets po T.Ld\r\nX 7 days\r\nDo Not Refill _X—\r\nRefill\r\nTimes\r\nDate 10/3/00\r\n(Sign)\r\nDEA Number\r\nPrint Last Name Johns\r\n"}
-print(requests.post(url=url, data=data).text)
