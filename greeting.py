@@ -184,7 +184,6 @@ def add_record():
         })
 
 
-
 @app.route('/')
 def index():
     # A welcome message to test our server
