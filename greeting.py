@@ -10,10 +10,12 @@ cors = CORS(app)
 @app.route('/login/', methods=['POST'])
 def login():
     email = request.form.get('email')
+    password = request.form.get('password')
     if not email:
         email = request.get_json()['email']
-
-    if email:
+    if not password:
+        password = request.get_json()['password']
+    if email and password:
         sql.insert_users_table(email, 0)
         sql.create_records_table(email)
         sql.create_meds_table(email)
