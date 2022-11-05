@@ -1,8 +1,11 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS, cross_origin
 import sql
 import ml
 
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 
 @app.route('/login/', methods=['POST'])
@@ -29,7 +32,6 @@ def login():
 
 @app.route('/upload/', methods=['POST'])
 def upload():
-    print('good')
     data = request.form.get('text')
     email = request.form.get('email')
     if not email:
@@ -39,7 +41,6 @@ def upload():
     if data and email:
         extracted_data = ml.extract_data(data)
         sql.final_insert_meds(email, extracted_data)
-        print(email, data)
         response = {
             "Message": f"Your prescription has been added",
             # this includes med_id which is needed for other requests
@@ -74,6 +75,7 @@ def records():
 
 
 @app.route('/points/', methods=['POST'])
+@cross_origin()
 def points():
     email = request.form.get('email')
     if not email:
