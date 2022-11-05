@@ -158,4 +158,5 @@ def test(command):
 # print(mycursor.fetchone())
 # mycursor.execute("""UPDATE userInfo SET username = 'test' WHERE username = 'test1'""")
 # conn.commit()
-
+mycursor.execute('SELECT * FROM testmeds')
+print(mycursor.fetchall())
