@@ -37,8 +37,8 @@ def upload():
     # if not data:
     #     data = request.get_json()['text']
     if data and email:
-        # extracted_data = ml.extract_data(data)
-        # sql.final_insert_meds(email, extracted_data)
+        extracted_data = ml.extract_data(data)
+        sql.final_insert_meds(email, extracted_data)
         print(email, data)
         response = {
             "Message": f"Your prescription has been added",
