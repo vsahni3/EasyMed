@@ -4,10 +4,13 @@ url = "https://freeocrapi.com/api"
 filename = "/Users/varunsahni/Desktop/JohnSmith-Example.jpg"
 data = {'file': open(filename, 'rb')}
 response = requests.request("POST", url, files=data)
-data = dict(response.json())['text'].replace('\n', ' ')
+# print(response.text)
+# data = dict(response.json())['text'].replace('\n', ' ')
+
 def get_data(filename):
     url = "https://freeocrapi.com/api"
     data = {'file': open(filename, 'rb')}
+   
     response = requests.request("POST", url, files=data)
     data = dict(response.json())['text'].replace('\n', ' ')
     return data
@@ -35,4 +38,4 @@ def extract_data(filename):
     
     return data
 
-    
+get_data("/Users/varunsahni/Desktop/JohnSmith-Example.jpg")
