@@ -91,10 +91,9 @@ def update_users_table(username: str, points_increase: int):
 #     time_difference = days_difference * 24 * 60 + (hour1 - hour2) * 60 + (minute1 - minute2) + (second1 - second2)
 
 
-def final_insert_meds(username, filename):
+def final_insert_meds(username, data):
     """Insert a medicine based on prescription picture"""
     # dict with keys: names : list, dosages: list
-    data = ml.extract_data(filename)
     names = data['names']
     dosages = data['dosages']
     for i in range(len(names)):

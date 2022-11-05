@@ -1,7 +1,7 @@
 import requests
 
 url = "https://freeocrapi.com/api"
-filename = "file:///var/mobile/Containers/Data/Application/C2B218E0-687E-4D8B-9402-85F24317A22B/Library/Caches/ExponentExperienceData/%2540ddpp%252Ffrontend/ImagePicker/C17FCD47-5925-43AC-82EF-33E11C5C466A.jpg"
+filename = "myopd-sample-rx-eng.png"
 data = {'file': open(filename, 'rb')}
 response = requests.request("POST", url, files=data)
 # print(response.text)
@@ -15,8 +15,7 @@ def get_data(filename):
     data = dict(response.json())['text'].replace('\n', ' ')
     return data
 
-def extract_data(filename):
-    raw_data = get_data(filename)
+def extract_data(raw_data):
     data = {
         'names': [],
         'dosages': []

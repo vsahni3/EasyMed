@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 import sql
+import ml
 
 app = Flask(__name__)
 
@@ -17,6 +18,30 @@ def login():
         sql.create_meds_table(email)
         response = {
             "Message": f"Welcome {email} to our awesome API!",
+            # this includes med_id which is needed for other requests
+            "Medicines": sql.load_meds(email),
+            # Add this option to distinct the POST request
+            "METHOD": "POST"
+        }
+        return jsonify(response)
+    else:
+        return jsonify({
+            "ERROR": "No email found. Please send an email."
+        })
+
+@app.route('/upload/', methods=['POST'])
+def upload():
+    data = request.form.get('text')
+    email = request.form.get('email')
+    if not email:
+        email = request.get_json()['email']
+    if not data:
+        data = request.get_json()['text']
+    if data and email:
+        extracted_data = ml.extract_data(data)
+        sql.final_insert_meds(email, extracted_data)
+        response = {
+            "Message": f"Your prescription has been added",
             # this includes med_id which is needed for other requests
             "Medicines": sql.load_meds(email),
             # Add this option to distinct the POST request
@@ -164,6 +189,7 @@ def add_record():
 def index():
     # A welcome message to test our server
     return "<h1>Welcome to our medium-greeting-api!</h1>"
+
 
 
 if __name__ == '__main__':
