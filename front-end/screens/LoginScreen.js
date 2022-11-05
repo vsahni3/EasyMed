@@ -20,7 +20,7 @@ export default function LoginScreen({navigation}) {
       res = await res.json();
       
       if(res.Medicines){
-        navigation.navigate('Home',{data:res.Medicines})
+        navigation.navigate('Home',{data:res.Medicines,email: email})
       }
     } catch (e) {
       console.error(e);
