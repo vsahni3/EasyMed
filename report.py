@@ -1,5 +1,7 @@
 """Various analysis functions for the records page"""
 import datetime
+import numpy as np
+import matplotlib.pyplot as plt
 
 
 def stats(records_data):
