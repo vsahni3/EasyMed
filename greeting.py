@@ -1,11 +1,10 @@
 from flask import Flask, request, jsonify
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 import sql
 import ml
 
 app = Flask(__name__)
 cors = CORS(app)
-app.config['CORS_HEADERS'] = 'Content-Type'
 
 
 @app.route('/login/', methods=['POST'])
@@ -75,7 +74,6 @@ def records():
 
 
 @app.route('/points/', methods=['POST'])
-@cross_origin()
 def points():
     email = request.form.get('email')
     if not email:
