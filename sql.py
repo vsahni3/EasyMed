@@ -134,10 +134,6 @@ def load_records(username: str) -> list[tuple[str]]:
     mycursor.execute(command)
 
     data = mycursor.fetchall()
-<<<<<<< HEAD
-
-=======
->>>>>>> 065b9467edb21a36934ae7e1834e694d785ac5ec
     data = [entry[1:4] + (entry[-2],) for entry in data]
     return data
 
@@ -168,11 +164,3 @@ def user_exists(username: str) -> bool:
 
 def test(command):
     return mycursor.execute(command)
-<<<<<<< HEAD
-create_meds_table('varungmailcom')
-create_records_table('varungmailcom')
-insert_meds_table('varungmailcom', 'Wednesday', '18:30', 'Aspirin', 100)
-insert_records_table('varungmailcom', 'Late', 1)
-
-=======
->>>>>>> 065b9467edb21a36934ae7e1834e694d785ac5ec
