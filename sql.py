@@ -154,5 +154,8 @@ def test(command):
 # insert_users_table('test1', '123', 0)
 # insert_users_table('test2', '123', 0)
 # insert_users_table('test3', '123', 0)
-# mycursor.execute('select * FROM userInfo')
-# print(mycursor.fetchall())
+# mycursor.execute('select username FROM userInfo')
+# print(mycursor.fetchone())
+# mycursor.execute("""UPDATE userInfo SET username = 'test' WHERE username = 'test1'""")
+# conn.commit()
+

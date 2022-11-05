@@ -1,10 +1,11 @@
 from flask import Flask, request, jsonify
-from flask_cors import CORS
+# from flask_cors import CORS
 import sql
 import ml
+import sqlite3
 
 app = Flask(__name__)
-cors = CORS(app)
+# cors = CORS(app)
 
 
 @app.route('/login/', methods=['POST'])
@@ -15,17 +16,27 @@ def login():
         email = request.get_json()['email']
     if not password:
         password = request.get_json()['password']
+    
     if email and password:
-        sql.insert_users_table(email, 0)
-        sql.create_records_table(email)
-        sql.create_meds_table(email)
-        response = {
-            # this includes med_id which is needed for other requests
-            "Medicines": sql.load_meds(email),
-            # Add this option to distinct the POST request
-            "METHOD": "POST"
-        }
-        return jsonify(response)
+        conn = sqlite3.connect('mydatabase.db', check_same_thread=False)
+        mycursor = conn.cursor()
+        mycursor.execute(f'SELECT password FROM userInfo WHERE username = "{email}"')
+        correct_password = mycursor.fetchone()[0]
+        if password == correct_password:
+        
+            sql.create_records_table(email)
+            sql.create_meds_table(email)
+            response = {
+                # this includes med_id which is needed for other requests
+                "Medicines": sql.load_meds(email),
+                # Add this option to distinct the POST request
+                "METHOD": "POST"
+            }
+            return jsonify(response)
+        else:
+            return jsonify({
+                'ERROR': 'Incorrect Login or Password'
+            })
     else:
         return jsonify({
             "ERROR": "No email found. Please send an email."
