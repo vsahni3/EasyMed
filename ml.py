@@ -1,11 +1,11 @@
 import requests
 
-url = "https://freeocrapi.com/api"
-filename = "myopd-sample-rx-eng.png"
-data = {'file': open(filename, 'rb')}
-response = requests.request("POST", url, files=data)
-# print(response.text)
-print(dict(response.json())['text'].replace('\n', ' '))
+# url = "https://freeocrapi.com/api"
+# filename = "myopd-sample-rx-eng.png"
+# data = {'file': open(filename, 'rb')}
+# response = requests.request("POST", url, files=data)
+# # print(response.text)
+# print(dict(response.json())['text'].replace('\n', ' '))
 
 def get_data(filename):
     url = "https://freeocrapi.com/api"
@@ -37,5 +37,3 @@ def extract_data(raw_data):
 
     return data
 
-url = 'https://ez-med.herokuapp.com/login'
-print(requests.post(url=url, data={'email': 'varun'}))
