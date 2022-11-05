@@ -7,6 +7,8 @@ app = Flask(__name__)
 @app.route('/login/', methods=['POST'])
 def login():
     email = request.form.get('email')
+    if not email:
+        email = request.get_json()['email']
     print("email:", email)
 
     if email:
