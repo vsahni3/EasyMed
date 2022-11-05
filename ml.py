@@ -38,4 +38,3 @@ def extract_data(filename):
     
     return data
 
-get_data("/Users/varunsahni/Desktop/JohnSmith-Example.jpg")

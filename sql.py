@@ -25,7 +25,7 @@ def insert_records_table(username: str, status: str, med: int):
     """Insert record into user's record table, where med is id of a medicine
 
     Preconditions:
-    - status in {'SNOOZE', 'MISS', 'GOOD'}
+    - status in {'MISS', 'GOOD'}
     """
 
     date_and_time = datetime.datetime.now()
@@ -50,15 +50,15 @@ def insert_meds_table(username: str, day: str, time: str, name: str, dosage: int
 def create_users_table():
     """Initialize user information table"""
 
-    command = f"CREATE TABLE IF NOT EXISTS userInfo (username nvarchar(100) PRIMARY KEY, password nvarchar(100), points INTEGER)"
+    command = f"CREATE TABLE IF NOT EXISTS userInfo (username nvarchar(100) PRIMARY KEY, points INTEGER)"
     mycursor.execute(command)
 
 
-def insert_users_table(username: str, password: str, points: int):
+def insert_users_table(username: str, points: int):
     """Insert new user into user table"""
-
-    command = f"INSERT INTO userInfo (username, password, points) VALUES ('{username}', '{password}', {points})"
-    mycursor.execute(command)
+    if not user_exists(username):
+        command = f"INSERT INTO userInfo (username, points) VALUES ('{username}', {points})"
+        mycursor.execute(command)
 
 
 def update_users_table(username: str, points_increase: int):
@@ -90,10 +90,7 @@ def final_insert_meds(username, filename):
     dosages = data['dosages']
     for i in range(len(names)):
         insert_meds_table(username, 'NULL', 'NULL', names[i], dosages[i])
-create_meds_table('varun')
-final_insert_meds('varun', "/Users/varunsahni/Desktop/JohnSmith-Example.jpg")
-mycursor.execute('SELECT * FROM varunmeds')
-print(mycursor.fetchall())
+
 def final_update_meds_table(username: str, med_id: int, day: str, time: str, name: str, dosage: int):
     """Update medicine record of user's medtable
 
@@ -125,9 +122,27 @@ def load_records(username: str) -> list[tuple[str]]:
     mycursor.execute(command)
 
     data = mycursor.fetchall()
+    print(data)
     data = [entry[1:4] + (entry[-2],) for entry in data]
     return data
 
 
+def load_meds(username: str) -> list[tuple]:
+    """Returns a list of current medications for specified user"""
+    command = f"""SELECT * FROM {username}meds"""
+    mycursor.execute(command)
+
+    return mycursor.fetchall()
+
+
+def user_exists(username: str) -> bool:
+    """Check if the user exists or not in the database"""
+    command = f"""SELECT * FROM userInfo WHERE username = '{username}'"""
+    mycursor.execute(command)
+
+    return mycursor.fetchone() is not None
+
+
 def test(command):
     return mycursor.execute(command)
+

@@ -1,46 +1,61 @@
 from flask import Flask, request, jsonify
-
+import sql
 
 app = Flask(__name__)
 
 
-@app.route('/getmsg/', methods=['GET'])
-def respond():
-    # Retrieve the name from the url parameter /getmsg/?name=
-    name = request.args.get("name", None)
-
-    # For debugging
-    print(f"Received: {name}")
-
-    response = {}
-
-    # Check if the user sent a name at all
-    if not name:
-        response["ERROR"] = "No name found. Please send a name."
-    # Check if the user entered a number
-    elif str(name).isdigit():
-        response["ERROR"] = "The name can't be numeric. Please send a string."
-    else:
-        response["MESSAGE"] = f"Welcome {name} to our awesome API!"
-
-    # Return the response in json format
-    return jsonify(response)
-
-
-@app.route('/post/', methods=['POST'])
-def post_something():
-    param = request.form.get('name')
-    print(param)
-    # You can add the test cases you made in the previous function, but in our case here you are just testing the POST functionality
-    if param:
-        return jsonify({
-            "Message": f"Welcome {name} to our awesome API!",
+@app.route('/login/', methods=['POST'])
+def login():
+    email = request.form.get('email')
+    print(email)
+    if email:
+        response = {
+            "Message": f"Welcome {email} to our awesome API!",
+            # this includes med_id which is needed for other requests
+            "Medicines": sql.load_meds(email),
             # Add this option to distinct the POST request
             "METHOD": "POST"
-        })
+        }
+        return jsonify(response)
     else:
         return jsonify({
-            "ERROR": "No name found. Please send a name."
+            "ERROR": "No email found. Please send an email."
+        })
+
+
+@app.route('/records/', methods=['POST'])
+def records():
+    email = request.form.get('email')
+    print(email)
+    if email:
+        response = {
+            "Message": f"Welcome {email} to our awesome API!",
+            "Medicines": sql.load_records(email),
+            # Add this option to distinct the POST request
+            "METHOD": "POST"
+        }
+        return jsonify(response)
+    else:
+        return jsonify({
+            "ERROR": "No email found. Please send an email."
+        })
+
+
+@app.route('/create/', methods=['POST'])
+def create_medicine():
+    email = request.form.get('email')
+    print(email)
+    if email:
+        response = {
+            "Message": f"Welcome {email} to our awesome API!",
+            "Medicines": sql.load_records(email),
+            # Add this option to distinct the POST request
+            "METHOD": "POST"
+        }
+        return jsonify(response)
+    else:
+        return jsonify({
+            "ERROR": "No email found. Please send an email."
         })
 
 
