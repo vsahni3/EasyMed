@@ -1,11 +1,11 @@
 import requests
 
-url = "https://freeocrapi.com/api"
-filename = "file:///var/mobile/Containers/Data/Application/C2B218E0-687E-4D8B-9402-85F24317A22B/Library/Caches/ExponentExperienceData/%2540ddpp%252Ffrontend/ImagePicker/C17FCD47-5925-43AC-82EF-33E11C5C466A.jpg"
-data = {'file': open(filename, 'rb')}
-response = requests.request("POST", url, files=data)
+# url = "https://freeocrapi.com/api"
+# filename = "file:///var/mobile/Containers/Data/Application/C2B218E0-687E-4D8B-9402-85F24317A22B/Library/Caches/ExponentExperienceData/%2540ddpp%252Ffrontend/ImagePicker/C17FCD47-5925-43AC-82EF-33E11C5C466A.jpg"
+# data = {'file': open(filename, 'rb')}
+# response = requests.request("POST", url, files=data)
 # print(response.text)
-print(dict(response.json())['text'].replace('\n', ' '))
+# print(dict(response.json())['text'].replace('\n', ' '))
 
 def get_data(filename):
     url = "https://freeocrapi.com/api"
@@ -37,6 +37,3 @@ def extract_data(filename):
             data['names'].append(cur_name[::-1])
 
     return data
-
-url = 'https://ez-med.herokuapp.com/login'
-print(requests.post(url=url, data={'email': 'varun'}))

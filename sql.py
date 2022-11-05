@@ -157,6 +157,3 @@ def test(command):
 # create_records_table('varungmailcom')
 # insert_meds_table('varungmailcom', 'Wednesday', '18:30', 'Aspirin', 100)
 # insert_records_table('varungmailcom', 'Late', 1)
-
-
-
