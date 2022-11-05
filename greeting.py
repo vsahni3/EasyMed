@@ -1,48 +1,58 @@
-from flask import Flask, request, jsonify
+from flask import Flask, render_template, request, redirect, session
+from flask_session import Session
+from functools import wraps
+from tempfile import mkdtemp
+import sqlite3
+
 app = Flask(__name__)
+app.config["SESSION_FILE_DIR"] = mkdtemp()
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_TYPE"] = "filesystem"
+Session(app)
 
 
-@app.route('/getmsg/', methods=['GET'])
-def respond():
-    # Retrieve the name from the url parameter /getmsg/?name=
-    name = request.args.get("name", None)
+def login_required(f):
+    """
+    Decorate routes to require login.
 
-    # For debugging
-    print(f"Received: {name}")
+    https://flask.palletsprojects.com/en/1.1.x/patterns/viewdecorators/
+    """
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if session.get("username") is None:
+            return redirect("/login/good")
+        return f(*args, **kwargs)
+    return decorated_function
 
-    response = {}
 
-    # Check if the user sent a name at all
-    if not name:
-        response["ERROR"] = "No name found. Please send a name."
-    # Check if the user entered a number
-    elif str(name).isdigit():
-        response["ERROR"] = "The name can't be numeric. Please send a string."
+@app.route("/login/<msg>", methods=["GET", "POST"])
+def login(msg):
+    """Log user in"""
+
+    conn = sqlite3.connect('mydatabase.db')
+    cursor = conn.cursor()
+
+    # User reached route via POST (as by submitting a form via POST)
+    if request.method == "POST":
+        session.clear()
+
+        username = request.form.get("username")
+        password = request.form.get("password")
+        session["username"] = username
+        session["password"] = password
+        sql1 = f"SELECT * FROM userInfo WHERE username = '{username}'"
+        cursor.execute(sql1)
+        data = cursor.fetchone()
+        if data and data[1] == password:
+            return redirect("/")
+        else:
+            return redirect(f"/login/Invalid Login")
     else:
-        response["MESSAGE"] = f"Welcome {name} to our awesome API!"
-
-    # Return the response in json format
-    return jsonify(response)
-
-
-@app.route('/post/', methods=['POST'])
-def post_something():
-    param = request.form.get('name')
-    print(param)
-    # You can add the test cases you made in the previous function, but in our case here you are just testing the POST functionality
-    if param:
-        return jsonify({
-            "Message": f"Welcome {name} to our awesome API!",
-            # Add this option to distinct the POST request
-            "METHOD": "POST"
-        })
-    else:
-        return jsonify({
-            "ERROR": "No name found. Please send a name."
-        })
+        return render_template("login.html", data=msg)
 
 
 @app.route('/')
+@login_required
 def index():
     # A welcome message to test our server
     return "<h1>Welcome to our medium-greeting-api!</h1>"
