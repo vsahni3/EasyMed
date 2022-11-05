@@ -4,9 +4,9 @@ import * as ImagePicker from 'expo-image-picker';
 import React, { useState, useEffect } from 'react';
 
 
-export default function HomeScreen() {
+export default function HomeScreen({route}) {
     const [image, setImage] = useState(null);
-  
+    const { data } = route.params;
     const postData = async(str) => {
       try {
         let files = {'file': "<_io.BufferedReader name='"+str+"'>"};
@@ -20,6 +20,7 @@ export default function HomeScreen() {
             files,
           }),
         });
+        console.log(files)
         res = await res.json();
         console.log('res',res)
       } catch (e) {
@@ -46,7 +47,7 @@ export default function HomeScreen() {
     return (
       <View style={styles.container}>
         <Button title={"Pick an image from camera roll"} onPress={pickImage} />
-        {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+        {/* {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />} */}
         <StatusBar style="auto" />
       </View>
     );
