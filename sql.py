@@ -3,7 +3,7 @@
 import sqlite3
 import datetime
 import ml
-conn = sqlite3.connect('mydatabase.db')
+conn = sqlite3.connect('mydatabase.db', check_same_thread=False)
 mycursor = conn.cursor()
 
 
@@ -56,6 +56,7 @@ def create_users_table():
 
     command = f"CREATE TABLE IF NOT EXISTS userInfo (username nvarchar(100) PRIMARY KEY, points INTEGER)"
     conn.execute(command)
+    conn.commit()
 
 
 def insert_users_table(username: str, points: int):

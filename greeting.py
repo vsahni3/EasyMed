@@ -7,6 +7,7 @@ app = Flask(__name__)
 @app.route('/login/', methods=['POST'])
 def login():
     email = request.form.get('email')
+    print("email:", email)
 
     if email:
         sql.insert_users_table(email, 0)
