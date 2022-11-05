@@ -37,3 +37,4 @@ def extract_data(filename):
             data['names'].append(cur_name[::-1])
 
     return data
+
