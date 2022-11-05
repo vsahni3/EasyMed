@@ -89,7 +89,9 @@ def update_users_table(username: str, points_increase: int):
 #
 #     time_difference = days_difference * 24 * 60 + (hour1 - hour2) * 60 + (minute1 - minute2) + (second1 - second2)
 
+
 def final_insert_meds(username, filename):
+    """Insert a medicine based on prescription picture"""
     # dict with keys: names : list, dosages: list
     data = ml.extract_data(filename)
     names = data['names']
@@ -97,6 +99,7 @@ def final_insert_meds(username, filename):
     for i in range(len(names)):
         insert_meds_table(username, 'NULL', 'NULL', names[i], dosages[i])
     conn.commit()
+
 
 def final_update_meds_table(username: str, med_id: int, day: str, time: str, name: str, dosage: int):
     """Update medicine record of user's medtable
@@ -131,7 +134,10 @@ def load_records(username: str) -> list[tuple[str]]:
     mycursor.execute(command)
 
     data = mycursor.fetchall()
+<<<<<<< HEAD
 
+=======
+>>>>>>> 065b9467edb21a36934ae7e1834e694d785ac5ec
     data = [entry[1:4] + (entry[-2],) for entry in data]
     return data
 
@@ -144,6 +150,14 @@ def load_meds(username: str) -> list[tuple]:
     return mycursor.fetchall()
 
 
+def load_points(username: str) -> int:
+    """Returns the amount of points the user has"""
+    command = f"""SELECT points FROM userInfo WHERE username = '{username}'"""
+    mycursor.execute(command)
+
+    return mycursor.fetchone()[0]
+
+
 def user_exists(username: str) -> bool:
     """Check if the user exists or not in the database"""
     command = f"""SELECT * FROM userInfo WHERE username = '{username}'"""
@@ -154,8 +168,11 @@ def user_exists(username: str) -> bool:
 
 def test(command):
     return mycursor.execute(command)
+<<<<<<< HEAD
 create_meds_table('varungmailcom')
 create_records_table('varungmailcom')
 insert_meds_table('varungmailcom', 'Wednesday', '18:30', 'Aspirin', 100)
 insert_records_table('varungmailcom', 'Late', 1)
 
+=======
+>>>>>>> 065b9467edb21a36934ae7e1834e694d785ac5ec
