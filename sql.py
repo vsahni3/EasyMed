@@ -83,6 +83,7 @@ def update_users_table(username: str, points_increase: int):
 #
 #     time_difference = days_difference * 24 * 60 + (hour1 - hour2) * 60 + (minute1 - minute2) + (second1 - second2)
 
+
 def final_insert_meds(username, filename):
     # dict with keys: names : list, dosages: list
     data = ml.extract_data(filename)
@@ -90,10 +91,8 @@ def final_insert_meds(username, filename):
     dosages = data['dosages']
     for i in range(len(names)):
         insert_meds_table(username, 'NULL', 'NULL', names[i], dosages[i])
-create_meds_table('varun')
-final_insert_meds('varun', "/Users/varunsahni/Desktop/JohnSmith-Example.jpg")
-mycursor.execute('SELECT * FROM varunmeds')
-print(mycursor.fetchall())
+
+
 def final_update_meds_table(username: str, med_id: int, day: str, time: str, name: str, dosage: int):
     """Update medicine record of user's medtable
 
@@ -135,6 +134,14 @@ def load_meds(username: str) -> list[tuple]:
     mycursor.execute(command)
 
     return mycursor.fetchall()
+
+
+def load_points(username: str) -> int:
+    """Returns the amount of points the user has"""
+    command = f"""SELECT points FROM userInfo WHERE username = '{username}'"""
+    mycursor.execute(command)
+
+    return mycursor.fetchone()[0]
 
 
 def user_exists(username: str) -> bool:

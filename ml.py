@@ -1,7 +1,7 @@
 import requests
 
 url = "https://freeocrapi.com/api"
-filename = "/Users/varunsahni/Desktop/JohnSmith-Example.jpg"
+filename = "myopd-sample-rx-eng.png"
 data = {'file': open(filename, 'rb')}
 response = requests.request("POST", url, files=data)
 # print(response.text)
@@ -10,7 +10,7 @@ response = requests.request("POST", url, files=data)
 def get_data(filename):
     url = "https://freeocrapi.com/api"
     data = {'file': open(filename, 'rb')}
-   
+
     response = requests.request("POST", url, files=data)
     data = dict(response.json())['text'].replace('\n', ' ')
     return data
@@ -35,7 +35,5 @@ def extract_data(filename):
                 cur_name += raw_data[start_index]
                 start_index -= 1
             data['names'].append(cur_name[::-1])
-    
-    return data
 
-get_data("/Users/varunsahni/Desktop/JohnSmith-Example.jpg")
+    return data
