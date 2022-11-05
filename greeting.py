@@ -177,6 +177,7 @@ def add_record():
 
         response = {
             # Add this option to distinct the POST request
+            "Records": sql.load_records(email),
             "METHOD": "POST"
         }
         return jsonify(response)
@@ -194,7 +195,6 @@ def add_record():
 def index():
     # A welcome message to test our server
     return "<h1>Welcome to our medium-greeting-api!</h1>"
-
 
 
 if __name__ == '__main__':
