@@ -12,6 +12,7 @@ def create_records_table(username: str):
 
     command = f"CREATE TABLE IF NOT EXISTS {username}records (id INTEGER PRIMARY KEY AUTOINCREMENT, date nvarchar(100), time nvarchar(100), status nvarchar(100), med INTEGER, FOREIGN KEY (med) REFERENCES {username}meds(id))"
     mycursor.execute(command)
+    conn.commit()
 
 
 def create_meds_table(username: str):
@@ -19,6 +20,7 @@ def create_meds_table(username: str):
 
     command = f"CREATE TABLE IF NOT EXISTS {username}meds (id INTEGER PRIMARY KEY AUTOINCREMENT, day nvarchar(100), time nvarchar(100), name nvarchar(100), dosage INTEGER)"
     mycursor.execute(command)
+    conn.commit()
 
 
 def insert_records_table(username: str, status: str, med: int):
@@ -33,6 +35,7 @@ def insert_records_table(username: str, status: str, med: int):
     time = date_and_time.strftime('%X')
     command = f"INSERT INTO {username}records (date, time, status, med) VALUES ('{date}', '{time}', '{status}', '{med}')"
     mycursor.execute(command)
+    conn.commit()
 
 
 def insert_meds_table(username: str, day: str, time: str, name: str, dosage: int):
@@ -45,13 +48,14 @@ def insert_meds_table(username: str, day: str, time: str, name: str, dosage: int
 
     command = f"INSERT INTO {username}meds (day, time, name, dosage) VALUES ('{day}', '{time}', '{name}', '{dosage}')"
     mycursor.execute(command)
+    conn.commit()
 
 
 def create_users_table():
     """Initialize user information table"""
 
     command = f"CREATE TABLE IF NOT EXISTS userInfo (username nvarchar(100) PRIMARY KEY, points INTEGER)"
-    mycursor.execute(command)
+    conn.execute(command)
 
 
 def insert_users_table(username: str, points: int):
@@ -59,6 +63,7 @@ def insert_users_table(username: str, points: int):
     if not user_exists(username):
         command = f"INSERT INTO userInfo (username, points) VALUES ('{username}', {points})"
         mycursor.execute(command)
+    conn.commit()
 
 
 def update_users_table(username: str, points_increase: int):
@@ -68,6 +73,7 @@ def update_users_table(username: str, points_increase: int):
     points = mycursor.fetchone()[0]
     command = f'''UPDATE userInfo SET points = {points + points_increase} WHERE username = "{username}"'''
     mycursor.execute(command)
+    conn.commit()
 
 
 # def calc_status(username, med_id):
@@ -90,6 +96,7 @@ def final_insert_meds(username, filename):
     dosages = data['dosages']
     for i in range(len(names)):
         insert_meds_table(username, 'NULL', 'NULL', names[i], dosages[i])
+    conn.commit()
 
 def final_update_meds_table(username: str, med_id: int, day: str, time: str, name: str, dosage: int):
     """Update medicine record of user's medtable
@@ -107,12 +114,14 @@ def final_update_meds_table(username: str, med_id: int, day: str, time: str, nam
     dosage = {dosage} 
     WHERE id = {med_id}"""
     mycursor.execute(command)
+    conn.commit()
 
 
 def remove_meds_row(username: str, med_id: int):
     """Remove medicine from user's med table"""
     command = f"DELETE FROM {username}meds WHERE id = {med_id}"
     mycursor.execute(command)
+    conn.commit()
 
 
 def load_records(username: str) -> list[tuple[str]]:
@@ -122,7 +131,7 @@ def load_records(username: str) -> list[tuple[str]]:
     mycursor.execute(command)
 
     data = mycursor.fetchall()
-    print(data)
+
     data = [entry[1:4] + (entry[-2],) for entry in data]
     return data
 
@@ -145,4 +154,8 @@ def user_exists(username: str) -> bool:
 
 def test(command):
     return mycursor.execute(command)
+create_meds_table('varungmailcom')
+create_records_table('varungmailcom')
+insert_meds_table('varungmailcom', 'Wednesday', '18:30', 'Aspirin', 100)
+insert_records_table('varungmailcom', 'Late', 1)
 
