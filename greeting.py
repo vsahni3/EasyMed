@@ -29,15 +29,17 @@ def login():
 
 @app.route('/upload/', methods=['POST'])
 def upload():
+    print('good')
     data = request.form.get('text')
     email = request.form.get('email')
-    if not email:
-        email = request.get_json()['email']
-    if not data:
-        data = request.get_json()['text']
+    # if not email:
+    #     email = request.get_json()['email']
+    # if not data:
+    #     data = request.get_json()['text']
     if data and email:
-        extracted_data = ml.extract_data(data)
-        sql.final_insert_meds(email, extracted_data)
+        # extracted_data = ml.extract_data(data)
+        # sql.final_insert_meds(email, extracted_data)
+        print(email, data)
         response = {
             "Message": f"Your prescription has been added",
             # this includes med_id which is needed for other requests

@@ -2,7 +2,7 @@
 # import datetime
 # import numpy as np
 # import matplotlib.pyplot as plt
-
+import requests
 # def stats(records_data):
 #     """Given records data, return the number of misses and frequency of drugs that were missed,
 #     also return number of drugs on time and which drugs were never missed, all in the past 7 days
@@ -97,3 +97,7 @@
 
 
 # matplotlib==3.6.2
+
+url = 'https://ez-med.herokuapp.com/do'
+data = {"email":"test"}
+print(requests.post(url=url, data=data).text)
