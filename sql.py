@@ -77,20 +77,6 @@ def update_users_table(username: str, points_increase: int):
     conn.commit()
 
 
-# def calc_status(username, med_id):
-#     days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-#     mycursor.execute(f'SELECT day, time FROM {username}meds WHERE id = "{med_id}"')
-#     day1, time1 = mycursor.fetchone()
-#     date_and_time = datetime.datetime.now()
-#     day2 = date_and_time.strftime('%A')
-#     time2 = date_and_time.strftime('%X')
-#     days_difference = min(abs(days.index(day1) - days.index(day2)), abs(days.index(day1) - (days.index(day2) - len(days))))
-#     hour1, minute1, second1 = time1[:2], time1[3:5], time1[6:]
-#     hour2, minute2, second2 = time2[:2], time2[3:5], time2[6:]
-#
-#     time_difference = days_difference * 24 * 60 + (hour1 - hour2) * 60 + (minute1 - minute2) + (second1 - second2)
-
-
 def final_insert_meds(username, filename):
     """Insert a medicine based on prescription picture"""
     # dict with keys: names : list, dosages: list
