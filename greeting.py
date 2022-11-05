@@ -10,14 +10,12 @@ def login():
     email = request.form.get('email')
     if not email:
         email = request.get_json()['email']
-    print("email:", email)
 
     if email:
         sql.insert_users_table(email, 0)
         sql.create_records_table(email)
         sql.create_meds_table(email)
         response = {
-            "Message": f"Welcome {email} to our awesome API!",
             # this includes med_id which is needed for other requests
             "Medicines": sql.load_meds(email),
             # Add this option to distinct the POST request
@@ -57,10 +55,11 @@ def upload():
 @app.route('/records/', methods=['POST'])
 def records():
     email = request.form.get('email')
+    if not email:
+        email = request.get_json()['email']
 
     if email:
         response = {
-            "Message": f"Welcome {email} to our awesome API!",
             "Records": sql.load_records(email),
             # Add this option to distinct the POST request
             "METHOD": "POST"
@@ -75,10 +74,11 @@ def records():
 @app.route('/points/', methods=['POST'])
 def points():
     email = request.form.get('email')
+    if not email:
+        email = request.get_json()['email']
 
     if email:
         response = {
-            "Message": f"Welcome {email} to our awesome API!",
             "Points": sql.load_points(email),
             # Add this option to distinct the POST request
             "METHOD": "POST"
@@ -97,7 +97,6 @@ def create_medicine():
 
     if email:
         response = {
-            "Message": f"Welcome {email} to our awesome API!",
             "Medicines": sql.load_records(email),
             # Add this option to distinct the POST request
             "METHOD": "POST"
@@ -113,12 +112,14 @@ def create_medicine():
 def update_medicine():
     email = request.form.get('email')
     new_med = request.form.get('new_med')
+    if not email:
+        email = request.get_json()['email']
+        new_med = request.get_json()['new_med']
     # new_med should be an array of [med_id, day, time, name, dosage]
     if email and new_med:
         sql.final_update_meds_table(email, *new_med)
 
         response = {
-            "Message": f"Welcome {email} to our awesome API!",
             "Medicines": sql.load_meds(email),
             # Add this option to distinct the POST request
             "METHOD": "POST"
@@ -138,11 +139,14 @@ def update_medicine():
 def remove_medicine():
     email = request.form.get('email')
     med_id = request.form.get('med_id')
+    if not email:
+        email = request.get_json()['email']
+        med_id = request.get_json()['med_id']
+
     if email and med_id and med_id.isdigit():
         sql.remove_meds_row(email, int(med_id))
 
         response = {
-            "Message": f"Welcome {email} to our awesome API!",
             "Medicines": sql.load_meds(email),
             # Add this option to distinct the POST request
             "METHOD": "POST"
@@ -162,6 +166,9 @@ def remove_medicine():
 def add_record():
     email = request.form.get('email')
     new_record = request.form.get('new_record')
+    if not email:
+        email = request.get_json()['email']
+        new_record = request.get_json()['new_record']
     # new_record should be [status, med_id]
     if email and new_record:
         sql.insert_records_table(email, *new_record)
@@ -169,8 +176,8 @@ def add_record():
             sql.update_users_table(email, 10)
 
         response = {
-            "Message": f"Welcome {email} to our awesome API!",
             # Add this option to distinct the POST request
+            "Records": sql.load_records(email),
             "METHOD": "POST"
         }
         return jsonify(response)
@@ -188,7 +195,6 @@ def add_record():
 def index():
     # A welcome message to test our server
     return "<h1>Welcome to our medium-greeting-api!</h1>"
-
 
 
 if __name__ == '__main__':

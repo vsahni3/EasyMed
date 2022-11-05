@@ -92,8 +92,7 @@ def update_users_table(username: str, points_increase: int):
 
 
 def final_insert_meds(username, filename):
-    """Insert a medicine based on presp
-    cription picture"""
+    """Insert a medicine based on prescription picture"""
     # dict with keys: names : list, dosages: list
     names = data['names']
     dosages = data['dosages']
@@ -174,4 +173,3 @@ def test(command):
 
 
 
-print(load_records('varun'))
