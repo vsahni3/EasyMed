@@ -90,10 +90,7 @@ def final_insert_meds(username, filename):
     dosages = data['dosages']
     for i in range(len(names)):
         insert_meds_table(username, 'NULL', 'NULL', names[i], dosages[i])
-create_meds_table('varun')
-final_insert_meds('varun', "/Users/varunsahni/Desktop/JohnSmith-Example.jpg")
-mycursor.execute('SELECT * FROM varunmeds')
-print(mycursor.fetchall())
+
 def final_update_meds_table(username: str, med_id: int, day: str, time: str, name: str, dosage: int):
     """Update medicine record of user's medtable
 
@@ -125,9 +122,11 @@ def load_records(username: str) -> list[tuple[str]]:
     mycursor.execute(command)
 
     data = mycursor.fetchall()
+    print(data)
     data = [entry[1:4] + (entry[-2],) for entry in data]
     return data
 
 
 def test(command):
     return mycursor.execute(command)
+
