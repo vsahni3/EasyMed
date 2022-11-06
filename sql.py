@@ -150,13 +150,3 @@ def user_exists(username: str) -> bool:
 def test(command):
     return mycursor.execute(command)
 
-
-# insert_users_table('test1', '123', 0)
-# insert_users_table('test2', '123', 0)
-# insert_users_table('test3', '123', 0)
-# mycursor.execute('select username FROM userInfo')
-# print(mycursor.fetchone())
-# mycursor.execute("""UPDATE userInfo SET username = 'test' WHERE username = 'test1'""")
-# conn.commit()
-mycursor.execute('SELECT * FROM testmeds')
-print(mycursor.fetchall())

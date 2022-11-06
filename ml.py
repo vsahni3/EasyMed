@@ -36,7 +36,3 @@ def extract_data(raw_data):
             data['names'].append(cur_name[::-1])
 
     return data
-
-url = 'https://ez-med.herokuapp.com/login'
-data = {'email': 'test', 'password': '123'}
-print(requests.post(url=url, data=data).text)
