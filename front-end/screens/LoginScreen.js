@@ -3,12 +3,12 @@ import React, { useState, useEffect } from 'react';
 
 export default function LoginScreen({navigation}) {
 
-  const [email,setEmail] = useState('');
-  const [password,setPassword] = useState('');
+  const [email,setEmail] = useState('test');
+  const [password,setPassword] = useState('123');
 
   const postData = async(email,password) => {
     try {
-      let res = await fetch('https://ez-med.herokuapp.com/login', {
+      let res = await fetch('https://ezmed.herokuapp.com/login', {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -20,7 +20,7 @@ export default function LoginScreen({navigation}) {
         }),
       });
       res = await res.json();
-      
+      console.log(res)
       if(res.Medicines){
         navigation.navigate('Home',{data:res.Medicines,email: email})
       }
