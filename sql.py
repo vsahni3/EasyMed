@@ -22,16 +22,13 @@ def create_meds_table(username: str):
     conn.commit()
 
 
-def insert_records_table(username: str, status: str, med: int):
+def insert_records_table(username: str, status: str, med: int, date: str, time: str):
     """Insert record into user's record table, where med is id of a medicine
 
     Preconditions:
     - status in {'MISS', 'GOOD'}
     """
 
-    date_and_time = datetime.datetime.now()
-    date = date_and_time.strftime('%x')
-    time = date_and_time.strftime('%X')
     command = f"INSERT INTO {username}records (date, time, status, med) VALUES ('{date}', '{time}', '{status}', '{med}')"
     mycursor.execute(command)
     conn.commit()
@@ -86,7 +83,7 @@ def final_insert_meds(username, data):
     conn.commit()
 
 
-def final_update_meds_table(username: str, med_id: int, day: str, time: str, name: str, dosage: int):
+def final_update_meds_table(username: str, med_id: str, day: str, time: str, name: str, dosage: str):
     """Update medicine record of user's medtable
 
     - med_id is an id of medicine to change in user's medtable
@@ -149,14 +146,5 @@ def user_exists(username: str) -> bool:
 
 def test(command):
     return mycursor.execute(command)
-
-
-# insert_users_table('test1', '123', 0)
-# insert_users_table('test2', '123', 0)
-# insert_users_table('test3', '123', 0)
-# mycursor.execute('select username FROM userInfo')
-# print(mycursor.fetchone())
-# mycursor.execute("""UPDATE userInfo SET username = 'test' WHERE username = 'test1'""")
-# conn.commit()
-mycursor.execute('SELECT * FROM testmeds')
-print(mycursor.fetchall())
+# mycursor.execute('SELECT * FROM testrecords')
+# print(mycursor.fetchall())

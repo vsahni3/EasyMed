@@ -1,11 +1,10 @@
 from flask import Flask, request, jsonify
-# from flask_cors import CORS
 import sql
 import ml
 import sqlite3
+from datetime import datetime
 
 app = Flask(__name__)
-# cors = CORS(app)
 
 
 @app.route('/login/', methods=['POST'])
@@ -16,14 +15,14 @@ def login():
         email = request.get_json()['email']
     if not password:
         password = request.get_json()['password']
-    
+
     if email and password:
         conn = sqlite3.connect('mydatabase.db', check_same_thread=False)
         mycursor = conn.cursor()
         mycursor.execute(f'SELECT password FROM userInfo WHERE username = "{email}"')
         correct_password = mycursor.fetchone()[0]
         if password == correct_password:
-        
+
             sql.create_records_table(email)
             sql.create_meds_table(email)
             response = {
@@ -41,6 +40,7 @@ def login():
         return jsonify({
             "ERROR": "No email found. Please send an email."
         })
+
 
 @app.route('/upload/', methods=['POST'])
 def upload():
@@ -106,20 +106,29 @@ def points():
 
 
 @app.route('/create/', methods=['POST'])
-# TODO: support file submission
 def create_medicine():
     email = request.form.get('email')
+    new_med = request.form.get('new_med')
+    if not email:
+        email = request.get_json()['email']
+        new_med = request.get_json()['new_med']
+    # new_med should be an array of [day, time, name, dosage]
+    if email and new_med:
+        sql.insert_meds_table(email, *new_med)
 
-    if email:
         response = {
-            "Medicines": sql.load_records(email),
+            "Medicines": sql.load_meds(email),
             # Add this option to distinct the POST request
             "METHOD": "POST"
         }
         return jsonify(response)
-    else:
+    elif not email:
         return jsonify({
             "ERROR": "No email found. Please send an email."
+        })
+    else:
+        return jsonify({
+            "ERROR": "No changes found. Please include medicine changes."
         })
 
 
@@ -180,19 +189,37 @@ def remove_medicine():
 @app.route('/newrecord/', methods=['POST'])
 def add_record():
     email = request.form.get('email')
-    new_record = request.form.get('new_record')
+    med_id = request.form.get('med_id')
+    expected_time = request.form.get('expected_time')
+    current_time = request.form.get('current_time')
+    current_date = request.form.get('current_date')
     if not email:
         email = request.get_json()['email']
-        new_record = request.get_json()['new_record']
-    # new_record should be [status, med_id]
-    if email and new_record:
-        sql.insert_records_table(email, *new_record)
-        if new_record[0] == "GOOD":
-            sql.update_users_table(email, 10)
+        med_id = request.get_json()['med_id']
+        expected_time = request.get_json()['expected_time']
+        current_time = request.get_json()['current_time']
+        current_date = request.get_json()['current_date']
+    # expected_time is in HH:MM:SS, 24h
+    # current_date is in MM/DD/YY
+    if email and med_id and expected_time:
+
+        current_datetime = datetime.strptime(current_date + " " + current_time, "%m/%d/%y %H:%M:%S")
+        expected_datetime = datetime.strptime(current_date + " " + expected_time, "%m/%d/%y %H:%M:%S")
+        time_diff = current_datetime - expected_datetime
+        mins_diff = abs(time_diff.total_seconds() / 60)
+
+        if mins_diff > 10:
+            status = 'MISS'
+        else:
+            status = 'GOOD'
+            # sql.update_users_table(email, 10)
+
+        sql.insert_records_table(email, status, med_id, current_date, current_time)
 
         response = {
             # Add this option to distinct the POST request
             "Records": sql.load_records(email),
+            'email': email,
             "METHOD": "POST"
         }
         return jsonify(response)
