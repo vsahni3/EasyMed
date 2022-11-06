@@ -26,7 +26,8 @@ export default {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.ddpp.frontend"
     },
     "web": {
       "favicon": "./assets/favicon.png"

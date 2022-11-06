@@ -120,7 +120,7 @@ export  const Item = ({ title,email,day,handleUpdate}) => {
       <Text style={styles.title}>{title[3]}</Text>
       <View style={styles.remindContainer}>
         <TouchableOpacity onPress={() => setModalVisible(true)}>
-          <Text style={styles.dayText}>{title[1]}</Text>
+          <Text style={styles.dayText}>{title[1] ==='NULL' ? 'Select day':title[1]}</Text>
         </TouchableOpacity> 
       
         <RNDateTimePicker mode='time' value={medTime} style={{height:50,width:100}} onChange={changeTime} />

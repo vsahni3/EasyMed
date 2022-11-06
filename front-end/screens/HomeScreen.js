@@ -16,31 +16,32 @@ export default function HomeScreen({route}) {
       let day = d.getDay();
       setDay(day)
       loadList(day);
+      console.log(medList)
     },[])
 
     const loadList = (day) => {
       if(day==0){
-        let list = data.filter(item => item[1] == 'Sunday' );
+        let list = data.filter(item => item[1] == 'Sunday' || item[1] == 'NULL' );
         setMedList(list)
       }
       else if(day==1){
-        let list = data.filter(item => item[1] == 'Monday' );
+        let list = data.filter(item => item[1] == 'Monday' || item[1] == 'NULL' );
         setMedList(list)
       }
       else if(day==2){
-        let list = data.filter(item => item[1] == 'Tuesday' );
+        let list = data.filter(item => item[1] == 'Tuesday' || item[1] == 'NULL' );
         setMedList(list)
       }
       else if(day==3){
-        let list = data.filter(item => item[1] == 'Wednesday' );
+        let list = data.filter(item => item[1] == 'Wednesday' || item[1] == 'NULL' );
         setMedList(list)
       }
       else if(day==4){
-        let list = data.filter(item => item[1] == 'Thursday' );
+        let list = data.filter(item => item[1] == 'Thursday' || item[1] == 'NULL' );
         setMedList(list)
       }
       else if(day==5){
-        let list = data.filter(item => item[1] == 'Friday' );
+        let list = data.filter(item => item[1] == 'Friday' || item[1] == 'NULL');
         setMedList(list)
       }
       else if(day==6){
@@ -63,7 +64,8 @@ export default function HomeScreen({route}) {
           })
         });
         res = await res.json();
-        console.log(res.Medicines)
+        setMedList(res.Medicines)
+        loadList(day)
       } catch (e) {
         console.error(e);
       }
