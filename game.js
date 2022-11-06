@@ -15,7 +15,6 @@ const THRESHOLD1 = 50
 const THRESHOLD2 = 100
 const THRESHOLD3 = 150
 
-
 let gameFrame = 0;
 
 const email = 'test'
@@ -24,8 +23,18 @@ const email = 'test'
 
 //getPoints();
 //THIS IS HARDCODED
-let data_points = 200;
+let data_points = 10;
+let added_points = 0;
 
+function addPoint(){
+    added_points += 10; 
+    console.log(added_points);
+}
+
+function updatePoint(){
+    data_points += added_points;
+    added_points = 0;
+}
 
 class Enemy {
     constructor(){
@@ -33,8 +42,8 @@ class Enemy {
         this.image.src = 'enemy4.png';
         this.spriteWidth = 213;
         this.spriteHeight = 213;
-        this.width = this.spriteWidth / 2 * (data_points / 25);
-        this.height = this.spriteHeight / 2 * (data_points / 25);
+        this.width = 100 + this.spriteWidth / 2 * (data_points / 14);
+        this.height = 100 + this.spriteHeight / 2 * (data_points / 14);
         this.x = Math.random() * (canvas.width - this.width);
         this.y = Math.random() * (canvas.height - this.height);
         this.newX = Math.random() * canvas.width;
@@ -62,20 +71,20 @@ class Enemy {
     }
     sizeup(){
         if (evolved3 == true){
-            this.width = this.spriteWidth / 2 * ((data_points - THRESHOLD3) / 25);
-            this.height = this.spriteHeight / 2 * ((data_points - THRESHOLD3) / 25);
+            this.width =  this.spriteWidth / 2 * ((data_points - THRESHOLD3) / 14);
+            this.height = this.spriteHeight / 2 * ((data_points - THRESHOLD3) / 14);
         }
         else if (evolved2 == true){
-            this.width = this.spriteWidth / 2 * ((data_points - THRESHOLD2) / 25);
-            this.height = this.spriteHeight / 2 * ((data_points - THRESHOLD2) / 25);
+            this.width = this.spriteWidth / 2 * ((data_points - THRESHOLD2) / 14);
+            this.height = this.spriteHeight / 2 * ((data_points - THRESHOLD2) / 14);
         }
         else if (evolved1 == true){
-            this.width = this.spriteWidth / 2 * ((data_points - THRESHOLD1) / 25);
-            this.height = this.spriteHeight / 2 * ((data_points - THRESHOLD1) / 25);
+            this.width = this.spriteWidth / 2 * ((data_points - THRESHOLD1) / 14);
+            this.height = this.spriteHeight / 2 * ((data_points - THRESHOLD1) / 14);
         }
         else{
-            this.width = this.spriteWidth / 2 * (data_points / 25);
-            this.height = this.spriteHeight / 2 * (data_points / 25);
+            this.width = this.spriteWidth / 2 * (data_points / 14);
+            this.height = this.spriteHeight / 2 * (data_points / 14);
         }
     }
 
