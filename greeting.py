@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 import sql
 import ml
 import sqlite3
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -182,11 +183,24 @@ def add_record():
     if not email:
         email = request.get_json()['email']
         new_record = request.get_json()['new_record']
-    # new_record should be [status, med_id]
+    # new_record should be [med_id, expected_time]
+    # expected_time is in HH:MM:SS, 24h
     if email and new_record:
-        sql.insert_records_table(email, *new_record)
-        if new_record[0] == "GOOD":
-            sql.update_users_table(email, 10)
+
+        current_time = datetime.now()
+        times = [int(time) for time in new_record[1].split(":")]
+        expected_time = datetime.today()
+        expected_time.replace(hour=times[0], minute=times[1], second=times[2])
+        time_diff = current_time - expected_time
+        mins_diff = time_diff.total_seconds() / 60
+
+        if mins_diff > 10:
+            status = 'MISS'
+        else:
+            status = 'GOOD'
+            # sql.update_users_table(email, 10)
+
+        sql.insert_records_table(email, status, new_record[0])
 
         response = {
             # Add this option to distinct the POST request
