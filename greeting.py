@@ -174,7 +174,7 @@ def add_record():
         current_datetime = datetime.now()
         times = [int(time) for time in expected_time.split(":")]
         expected_datetime = datetime.today()
-        expected_datetime.replace(hour=times[0], minute=times[1], second=times[2])
+        expected_datetime = expected_datetime.replace(hour=times[0], minute=times[1], second=times[2])
         time_diff = current_datetime - expected_datetime
         mins_diff = time_diff.total_seconds() / 60
 
