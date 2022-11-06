@@ -8,7 +8,12 @@ export  const Item = ({ title,email,day,handleUpdate}) => {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedDay,setSelectedDay] = useState(day);
+  const [medTime,setMedTime] = useState(new Date());
 
+  useEffect(()=>{
+    setTime(title)
+    
+  },[])
   const handleDone = async (title,email) => {
     try {
       let res = await fetch('https://ezmed.herokuapp.com/newrecord', {
@@ -51,11 +56,26 @@ export  const Item = ({ title,email,day,handleUpdate}) => {
     var time = hours + ":" + today.getMinutes() + ":" + today.getSeconds();
     return time;
   }
+  const setTime = (title) => {
+    let hours = title[2].slice(0,2);
+    let minutes = title[2].slice(3,5);
+    let seconds = title[2].slice(6,8);
+    let date = new Date(title[2]);
+    // date.setHours(hours);
+    // date.setMinutes(minutes);
+    // date.setSeconds(seconds);
+    
+    if(date.getHours() ){
+      setMedTime(date);
+    }
+    
+  }
   const handleChangeDay = (day) =>{
     setSelectedDay(day);
   }
-  const handleOkay = async () => {
+  const handleOkay = async (time) => {
     try {
+      let nTime = time ? time : medTime;
       let res = await fetch('https://ezmed.herokuapp.com/update', {
         method: 'POST',
         headers: {
@@ -64,11 +84,11 @@ export  const Item = ({ title,email,day,handleUpdate}) => {
         },
         body: JSON.stringify({
           email:email,
-          new_med:[title[0],getDay(selectedDay),title[2],title[3],title[4]]
+          new_med:[title[0],getDay(selectedDay),nTime,title[3],title[4]]
         })
       });
       res = await res.json();
-      console.log('dd',res)
+      // console.log('dd',res)
       handleUpdate(res.Medicines)
       setModalVisible(!modalVisible)
     } catch (e) {
@@ -91,15 +111,19 @@ export  const Item = ({ title,email,day,handleUpdate}) => {
     else if (day == 6)
     return 'Saturday'
   }
+  const changeTime = (event, date) => {
+    // setMedTime(getTime(date));
+    handleOkay(date)
+  };
   return(
     <View style={styles.item}>
       <Text style={styles.title}>{title[3]}</Text>
       <View style={styles.remindContainer}>
         <TouchableOpacity onPress={() => setModalVisible(true)}>
-          <Text>{title[1]}</Text>
+          <Text style={styles.dayText}>{title[1]}</Text>
         </TouchableOpacity> 
       
-        <RNDateTimePicker mode='time' value={new Date()} style={{height:50,width:100}} />
+        <RNDateTimePicker mode='time' value={medTime} style={{height:50,width:100}} onChange={changeTime} />
       </View>
       
       <TouchableOpacity style={styles.doneBtn} onPress={()=>handleDone(title,email)} >
