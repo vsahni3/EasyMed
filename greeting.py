@@ -164,17 +164,20 @@ def add_record():
     email = request.form.get('email')
     med_id = request.form.get('med_id')
     expected_time = request.form.get('expected_time')
+    current_time = request.form.get('current_time')
+    current_date = request.form.get('current_date')
     if not email:
         email = request.get_json()['email']
         med_id = request.get_json()['med_id']
         expected_time = request.get_json()['expected_time']
+        current_time = request.get_json()['current_time']
+        current_date = request.get_json()['current_date']
     # expected_time is in HH:MM:SS, 24h
+    # current_date is in MM/DD/YY
     if email and med_id and expected_time:
 
-        current_datetime = datetime.now()
-        times = [int(time) for time in expected_time.split(":")]
-        expected_datetime = datetime.today()
-        expected_datetime = expected_datetime.replace(hour=times[0], minute=times[1], second=times[2])
+        current_datetime = datetime.strptime(current_date + " " + current_time, "%m/%d/%y %H:%M:%S")
+        expected_datetime = datetime.strptime(current_date + " " + expected_time, "%m/%d/%y %H:%M:%S")
         time_diff = current_datetime - expected_datetime
         mins_diff = abs(time_diff.total_seconds() / 60)
 
@@ -184,7 +187,7 @@ def add_record():
             status = 'GOOD'
             # sql.update_users_table(email, 10)
 
-        sql.insert_records_table(email, status, med_id)
+        sql.insert_records_table(email, status, med_id, current_date, current_time)
 
         response = {
             # Add this option to distinct the POST request

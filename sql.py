@@ -22,16 +22,13 @@ def create_meds_table(username: str):
     conn.commit()
 
 
-def insert_records_table(username: str, status: str, med: int):
+def insert_records_table(username: str, status: str, med: int, date: str, time: str):
     """Insert record into user's record table, where med is id of a medicine
 
     Preconditions:
     - status in {'MISS', 'GOOD'}
     """
 
-    date_and_time = datetime.datetime.now()
-    date = date_and_time.strftime('%x')
-    time = date_and_time.strftime('%X')
     command = f"INSERT INTO {username}records (date, time, status, med) VALUES ('{date}', '{time}', '{status}', '{med}')"
     mycursor.execute(command)
     conn.commit()
