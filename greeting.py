@@ -219,6 +219,7 @@ def add_record():
         response = {
             # Add this option to distinct the POST request
             "Records": sql.load_records(email),
+            'email': email,
             "METHOD": "POST"
         }
         return jsonify(response)

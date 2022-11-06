@@ -146,3 +146,5 @@ def user_exists(username: str) -> bool:
 
 def test(command):
     return mycursor.execute(command)
+# mycursor.execute('SELECT * FROM testrecords')
+# print(mycursor.fetchall())
