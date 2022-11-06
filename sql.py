@@ -86,7 +86,7 @@ def final_insert_meds(username, data):
     conn.commit()
 
 
-def final_update_meds_table(username: str, med_id: int, day: str, time: str, name: str, dosage: int):
+def final_update_meds_table(username: str, med_id: str, day: str, time: str, name: str, dosage: str):
     """Update medicine record of user's medtable
 
     - med_id is an id of medicine to change in user's medtable

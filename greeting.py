@@ -41,6 +41,7 @@ def login():
             "ERROR": "No email found. Please send an email."
         })
 
+
 @app.route('/upload/', methods=['POST'])
 def upload():
     data = request.form.get('text')
@@ -94,24 +95,6 @@ def points():
     if email:
         response = {
             "Points": sql.load_points(email),
-            # Add this option to distinct the POST request
-            "METHOD": "POST"
-        }
-        return jsonify(response)
-    else:
-        return jsonify({
-            "ERROR": "No email found. Please send an email."
-        })
-
-
-@app.route('/create/', methods=['POST'])
-# TODO: support file submission
-def create_medicine():
-    email = request.form.get('email')
-
-    if email:
-        response = {
-            "Medicines": sql.load_records(email),
             # Add this option to distinct the POST request
             "METHOD": "POST"
         }
@@ -179,19 +162,20 @@ def remove_medicine():
 @app.route('/newrecord/', methods=['POST'])
 def add_record():
     email = request.form.get('email')
-    new_record = request.form.get('new_record')
+    med_id = request.form.get('med_id')
+    expected_time = request.form.get('expected_time')
     if not email:
         email = request.get_json()['email']
-        new_record = request.get_json()['new_record']
-    # new_record should be [med_id, expected_time]
+        med_id = request.get_json()['med_id']
+        expected_time = request.get_json()['expected_time']
     # expected_time is in HH:MM:SS, 24h
-    if email and new_record:
+    if email and med_id and expected_time:
 
-        current_time = datetime.now()
-        times = [int(time) for time in new_record[1].split(":")]
-        expected_time = datetime.today()
-        expected_time.replace(hour=times[0], minute=times[1], second=times[2])
-        time_diff = current_time - expected_time
+        current_datetime = datetime.now()
+        times = [int(time) for time in expected_time.split(":")]
+        expected_datetime = datetime.today()
+        expected_datetime.replace(hour=times[0], minute=times[1], second=times[2])
+        time_diff = current_datetime - expected_datetime
         mins_diff = time_diff.total_seconds() / 60
 
         if mins_diff > 10:
@@ -200,7 +184,7 @@ def add_record():
             status = 'GOOD'
             # sql.update_users_table(email, 10)
 
-        sql.insert_records_table(email, status, new_record[0])
+        sql.insert_records_table(email, status, med_id)
 
         response = {
             # Add this option to distinct the POST request
