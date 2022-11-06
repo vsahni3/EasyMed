@@ -2,7 +2,6 @@
 
 import sqlite3
 import datetime
-import ml
 conn = sqlite3.connect('mydatabase.db', check_same_thread=False)
 mycursor = conn.cursor()
 
@@ -54,15 +53,15 @@ def insert_meds_table(username: str, day: str, time: str, name: str, dosage: int
 def create_users_table():
     """Initialize user information table"""
 
-    command = f"CREATE TABLE IF NOT EXISTS userInfo (username nvarchar(100) PRIMARY KEY, points INTEGER)"
+    command = f"CREATE TABLE IF NOT EXISTS userInfo (username nvarchar(100) PRIMARY KEY, password nvarchar(100), points INTEGER)"
     conn.execute(command)
     conn.commit()
 
 
-def insert_users_table(username: str, points: int):
+def insert_users_table(username: str, password, points: int):
     """Insert new user into user table"""
     if not user_exists(username):
-        command = f"INSERT INTO userInfo (username, points) VALUES ('{username}', {points})"
+        command = f"INSERT INTO userInfo (username, password, points) VALUES ('{username}', '{password}', {points})"
         mycursor.execute(command)
     conn.commit()
 
@@ -75,20 +74,6 @@ def update_users_table(username: str, points_increase: int):
     command = f'''UPDATE userInfo SET points = {points + points_increase} WHERE username = "{username}"'''
     mycursor.execute(command)
     conn.commit()
-
-
-# def calc_status(username, med_id):
-#     days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-#     mycursor.execute(f'SELECT day, time FROM {username}meds WHERE id = "{med_id}"')
-#     day1, time1 = mycursor.fetchone()
-#     date_and_time = datetime.datetime.now()
-#     day2 = date_and_time.strftime('%A')
-#     time2 = date_and_time.strftime('%X')
-#     days_difference = min(abs(days.index(day1) - days.index(day2)), abs(days.index(day1) - (days.index(day2) - len(days))))
-#     hour1, minute1, second1 = time1[:2], time1[3:5], time1[6:]
-#     hour2, minute2, second2 = time2[:2], time2[3:5], time2[6:]
-#
-#     time_difference = days_difference * 24 * 60 + (hour1 - hour2) * 60 + (minute1 - minute2) + (second1 - second2)
 
 
 def final_insert_meds(username, data):
@@ -166,10 +151,12 @@ def test(command):
     return mycursor.execute(command)
 
 
-# create_meds_table('varungmailcom')
-# create_records_table('varungmailcom')
-# insert_meds_table('varungmailcom', 'Wednesday', '18:30', 'Aspirin', 100)
-# insert_records_table('varungmailcom', 'Late', 1)
-
-
-
+# insert_users_table('test1', '123', 0)
+# insert_users_table('test2', '123', 0)
+# insert_users_table('test3', '123', 0)
+# mycursor.execute('select username FROM userInfo')
+# print(mycursor.fetchone())
+# mycursor.execute("""UPDATE userInfo SET username = 'test' WHERE username = 'test1'""")
+# conn.commit()
+mycursor.execute('SELECT * FROM testmeds')
+print(mycursor.fetchall())

@@ -2,7 +2,7 @@
 # import datetime
 # import numpy as np
 # import matplotlib.pyplot as plt
-import requests
+import sql 
 # def stats(records_data):
 #     """Given records data, return the number of misses and frequency of drugs that were missed,
 #     also return number of drugs on time and which drugs were never missed, all in the past 7 days
@@ -56,8 +56,8 @@ import requests
 # def graph1_data(records_data):
 #     """x axis is days, two bars for num missed and num completed"""
 #     x = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-#     y1 = [0] * len(y1)
-#     y2 = [0] * len(y1)
+#     y1 = [0] * len(x)
+#     y2 = [0] * len(x)
 #     today = datetime.date.today()
 #     for row in records_data:
 #         date = datetime.datetime.strptime(row[0], "%m/%d/%y").date()
@@ -69,7 +69,7 @@ import requests
 #             y1[weekday] += 1
 #         else:
 #             y2[weekday] += 1
-
+#     return x, y1, y2
 
 # def graph2_data(records_data):
 #     """x axis is medicine, two bars for num missed and num completed"""
@@ -82,22 +82,20 @@ import requests
 #             continue
 #         name = row[-1]
 #         status = row[-2]
-#         if name in data:
-#             if status == 'MISS':
-#                 data[name][1] += 1
-#             else:
-#                 data[name][0] += 1
+#         if name not in data:
+#             data[name] = [0, 0]
+#         if status == 'MISS':
+#             data[name][1] += 1
 #         else:
-#             if status == 'MISS':
-#                 data[name][1] += 1
-#             else:
-#                 data[name][0] += 1
+#             data[name][0] += 1
+#     x = list(data.keys())
+#     print(list(data.values()))
 
 
 
 
-# matplotlib==3.6.2
+# sql.final_update_meds_table('test', 3, 'Tuesday', '18:00:21', 'Amoxicillin', 250)
+# sql.final_update_meds_table('test', 4, 'Friday', '08:21:09', 'Amoxicillin', 150)
+# print(sql.load_meds('test'))
+# print(graph2_data(sql.load_records('test')))
 
-url = 'https://ez-med.herokuapp.com/upload'
-data = {"email":"test","text":"Patient Name John Smith\r\nAddress\r\nDLIIutn MN 55804\r\n42\r\nRx Amoxicillin 250 mg tablets\r\nTT tablets po T.Ld\r\nX 7 days\r\nDo Not Refill _X—\r\nRefill\r\nTimes\r\nDate 10/3/00\r\n(Sign)\r\nDEA Number\r\nPrint Last Name Johns\r\n"}
-print(requests.post(url=url, data=data).text)
