@@ -149,4 +149,3 @@ def user_exists(username: str) -> bool:
 
 def test(command):
     return mycursor.execute(command)
-
