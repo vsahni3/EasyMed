@@ -4,8 +4,9 @@ import React, { useState, useEffect } from 'react';
 export default function LoginScreen({navigation}) {
 
   const [email,setEmail] = useState('');
+  const [password,setPassword] = useState('');
 
-  const postData = async(email) => {
+  const postData = async(email,password) => {
     try {
       let res = await fetch('https://ez-med.herokuapp.com/login', {
         method: 'POST',
@@ -14,7 +15,8 @@ export default function LoginScreen({navigation}) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          email:email
+          email:email,
+          password:password
         }),
       });
       res = await res.json();
@@ -27,8 +29,8 @@ export default function LoginScreen({navigation}) {
     }
   }
   const handleLogin = () => {
-    if(email){
-      postData(email)
+    if(email && password){
+      postData(email,password)
     }
     else{
       Alert.alert("Please enter email")
@@ -37,10 +39,16 @@ export default function LoginScreen({navigation}) {
     return (
       <View style={styles.container}>
         <TextInput
-        style={styles.input}
-        onChangeText={setEmail}
-        value={email}
-      />
+          style={styles.input}
+          onChangeText={setEmail}
+          value={email}
+        />
+        <TextInput
+          style={styles.input}
+          onChangeText={setPassword}
+          value={password}
+          secureTextEntry={true}
+        />
         <Button title='Login' onPress={handleLogin} />
       </View>
     );
