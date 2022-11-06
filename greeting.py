@@ -1,11 +1,10 @@
 from flask import Flask, request, jsonify
-from flask_cors import cross_origin, CORS
 import sql
 import ml
 import sqlite3
 
 app = Flask(__name__)
-CORS(app)
+
 
 @app.route('/login/', methods=['POST'])
 def login():
@@ -86,7 +85,6 @@ def records():
 
 
 @app.route('/points/', methods=['POST'])
-@cross_origin()
 def points():
     email = request.form.get('email')
     if not email:
