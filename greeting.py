@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 import sql
 import ml
+import sqlite3
 
 app = Flask(__name__)
 
@@ -8,20 +9,32 @@ app = Flask(__name__)
 @app.route('/login/', methods=['POST'])
 def login():
     email = request.form.get('email')
+    password = request.form.get('password')
     if not email:
         email = request.get_json()['email']
+    if not password:
+        password = request.get_json()['password']
 
-    if email:
-        sql.insert_users_table(email, 0)
-        sql.create_records_table(email)
-        sql.create_meds_table(email)
-        response = {
-            # this includes med_id which is needed for other requests
-            "Medicines": sql.load_meds(email),
-            # Add this option to distinct the POST request
-            "METHOD": "POST"
-        }
-        return jsonify(response)
+    if email and password:
+        conn = sqlite3.connect('mydatabase.db', check_same_thread=False)
+        mycursor = conn.cursor()
+        mycursor.execute(f'SELECT password FROM userInfo WHERE username = "{email}"')
+        correct_password = mycursor.fetchone()[0]
+        if password == correct_password:
+
+            sql.create_records_table(email)
+            sql.create_meds_table(email)
+            response = {
+                # this includes med_id which is needed for other requests
+                "Medicines": sql.load_meds(email),
+                # Add this option to distinct the POST request
+                "METHOD": "POST"
+            }
+            return jsonify(response)
+        else:
+            return jsonify({
+                'ERROR': 'Incorrect Login or Password'
+            })
     else:
         return jsonify({
             "ERROR": "No email found. Please send an email."

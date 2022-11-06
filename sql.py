@@ -53,15 +53,15 @@ def insert_meds_table(username: str, day: str, time: str, name: str, dosage: int
 def create_users_table():
     """Initialize user information table"""
 
-    command = f"CREATE TABLE IF NOT EXISTS userInfo (username nvarchar(100) PRIMARY KEY, points INTEGER)"
+    command = f"CREATE TABLE IF NOT EXISTS userInfo (username nvarchar(100) PRIMARY KEY, password nvarchar(100), points INTEGER)"
     conn.execute(command)
     conn.commit()
 
 
-def insert_users_table(username: str, points: int):
+def insert_users_table(username: str, password, points: int):
     """Insert new user into user table"""
     if not user_exists(username):
-        command = f"INSERT INTO userInfo (username, points) VALUES ('{username}', {points})"
+        command = f"INSERT INTO userInfo (username, password, points) VALUES ('{username}', '{password}', {points})"
         mycursor.execute(command)
     conn.commit()
 
@@ -149,3 +149,14 @@ def user_exists(username: str) -> bool:
 
 def test(command):
     return mycursor.execute(command)
+
+
+# insert_users_table('test1', '123', 0)
+# insert_users_table('test2', '123', 0)
+# insert_users_table('test3', '123', 0)
+# mycursor.execute('select username FROM userInfo')
+# print(mycursor.fetchone())
+# mycursor.execute("""UPDATE userInfo SET username = 'test' WHERE username = 'test1'""")
+# conn.commit()
+mycursor.execute('SELECT * FROM testmeds')
+print(mycursor.fetchall())

@@ -22,30 +22,6 @@ const email = 'test'
 //POST: send email (hardcoded)
 // => GET: # of points 
 
-const postData = async(email) => {
-    try {
-      let res = await fetch('https://ez-med.herokuapp.com/points', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          'email': 'test'
-        }),
-      });
-      res = await res.json();
-      console.log(res)
-      // if(res.Medicines){
-      //   navigation.navigate('Home',{data:res.Medicines,email: email})
-      // }
-    } catch (e) {
-      console.error(e);
-    }
-}
-
-postData();
-
 //getPoints();
 //THIS IS HARDCODED
 let data_points = 200;

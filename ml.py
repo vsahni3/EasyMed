@@ -37,3 +37,6 @@ def extract_data(raw_data):
 
     return data
 
+url = 'https://ez-med.herokuapp.com/login'
+data = {'email': 'test', 'password': '123'}
+print(requests.post(url=url, data=data).text)

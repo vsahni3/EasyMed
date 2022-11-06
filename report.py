@@ -94,8 +94,8 @@ import sql
 
 
 
-sql.final_update_meds_table('test', 3, 'Tuesday', '18:00:21', 'Amoxicillin', 250)
-sql.final_update_meds_table('test', 4, 'Friday', '08:21:09', 'Amoxicillin', 150)
-print(sql.load_meds('test'))
+# sql.final_update_meds_table('test', 3, 'Tuesday', '18:00:21', 'Amoxicillin', 250)
+# sql.final_update_meds_table('test', 4, 'Friday', '08:21:09', 'Amoxicillin', 150)
+# print(sql.load_meds('test'))
 # print(graph2_data(sql.load_records('test')))
 
