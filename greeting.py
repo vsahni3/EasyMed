@@ -105,6 +105,33 @@ def points():
         })
 
 
+@app.route('/create/', methods=['POST'])
+def create_medicine():
+    email = request.form.get('email')
+    new_med = request.form.get('new_med')
+    if not email:
+        email = request.get_json()['email']
+        new_med = request.get_json()['new_med']
+    # new_med should be an array of [day, time, name, dosage]
+    if email and new_med:
+        sql.insert_meds_table(email, *new_med)
+
+        response = {
+            "Medicines": sql.load_meds(email),
+            # Add this option to distinct the POST request
+            "METHOD": "POST"
+        }
+        return jsonify(response)
+    elif not email:
+        return jsonify({
+            "ERROR": "No email found. Please send an email."
+        })
+    else:
+        return jsonify({
+            "ERROR": "No changes found. Please include medicine changes."
+        })
+
+
 @app.route('/update/', methods=['POST'])
 def update_medicine():
     email = request.form.get('email')
