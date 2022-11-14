@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, Text, View,TouchableOpacity,Modal,Pressable } from 'react-native';
+import { FlatList, StyleSheet, Text, View,TouchableOpacity,Modal,Pressable,Linking } from 'react-native';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import WeekdayPicker from "react-native-weekday-picker"
 import React, { useState, useEffect } from 'react';
@@ -113,8 +113,13 @@ export  const Item = ({ title,email,day,handleUpdate}) => {
   }
   const changeTime = (event, date) => {
     // setMedTime(getTime(date));
-    handleOkay(date)
+    // handleOkay(date)
   };
+  const handleMAD =()=>{
+
+    handleDone(title,email)
+    Linking.openURL('https://lighthearted-pixie-69acca.netlify.app/')
+  }
   return(
     <View style={styles.item}>
       <Text style={styles.title}>{title[3]}</Text>
@@ -126,7 +131,7 @@ export  const Item = ({ title,email,day,handleUpdate}) => {
         <RNDateTimePicker mode='time' value={medTime} style={{height:50,width:100}} onChange={changeTime} />
       </View>
       
-      <TouchableOpacity style={styles.doneBtn} onPress={()=>handleDone(title,email)} >
+      <TouchableOpacity style={styles.doneBtn} onPress={handleMAD} >
         <Text style={styles.doneTxt}>Mark as Done</Text>
       </TouchableOpacity>
       <Modal
