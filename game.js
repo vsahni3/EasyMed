@@ -26,11 +26,13 @@ const email = 'test'
 let data_points = 10;
 let added_points = 0;
 
+//size of the pet is not affected by updating added_points
 function addPoint(){
     added_points += 10; 
     console.log(added_points);
 }
 
+//updating data_points immediately changes the size of the pet
 function updatePoint(){
     data_points += added_points;
     added_points = 0;
@@ -39,9 +41,9 @@ function updatePoint(){
 class Enemy {
     constructor(){
         this.image = new Image();
-        this.image.src = 'enemy4.png';
-        this.spriteWidth = 213;
-        this.spriteHeight = 213;
+        this.image.src = 'enemy3.png';
+        this.spriteWidth = 218;
+        this.spriteHeight = 177;
         this.width = 100 + this.spriteWidth / 2 * (data_points / 14);
         this.height = 100 + this.spriteHeight / 2 * (data_points / 14);
         this.x = Math.random() * (canvas.width - this.width);
@@ -93,10 +95,10 @@ class Enemy {
             this.frame * this.spriteWidth, 0, this.spriteWidth, this.spriteHeight, // area of crop from src picture
             this.x, this.y, this.width, this.height); // where in canvas to be drawn
     }
-    evolve3(){
-        this.image.src = 'enemy3.png';
-        this.spriteWidth = 218;
-        this.spriteHeight = 177;
+    evolve3(){ // actually, it's 4 
+        this.image.src = 'enemy4.png';
+        this.spriteWidth = 213;
+        this.spriteHeight = 213;
     }
     evolve2(){
         this.image.src = 'enemy2.png';
